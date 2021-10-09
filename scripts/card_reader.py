@@ -23,8 +23,9 @@ class CardReader(object):
     self.edy = self.set_felica("8054")
     self.express = self.set_felica("854C")
     self.nanaco = self.set_felica("04C7")
+    self.waon = self.set_felica("684F")
 
-    self.targets = [ self.T106A, self.T106B, self.edy, self.express, self.nanaco ]
+    self.targets = [ self.T106A, self.T106B, self.edy, self.express, self.nanaco, self.waon ]
 
   #
   #
