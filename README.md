@@ -1,12 +1,11 @@
 # nfc_reader
 Simple NFC reader 
 
-Requirements:
-- Raspberry Pi 3B
-- RaspiOS
-- Card Reader(Sony RC-S-380)
+## Requirements:
+- Raspberry Pi 3B(Raspberry Pi OS)
+- NFC Card Reader(Sony RC-S-380)
 
-Quick Start on RaspiOS:
+## Quick Start on RaspiOS:
 - Install python3
     - sudo apt install python3
 - Install python3-pip
