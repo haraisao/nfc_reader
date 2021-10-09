@@ -65,14 +65,15 @@ class CardReader(object):
     while self.sense() is None: time.sleep(0.1)
     if self.on_discover(self.target) :
       tag = nfc.tag.activate(self.clf, self.target)
-      return self.get_idm(tag)
+      return tag, self.get_idm(tag)
 
 #
 #
 def main():
   cr=CardReader()
   print("Please touch")
-  cr.read_card_id()
+  tag, idm = cr.read_card_id()
+  print(idm, tag)
   
 
 if __name__ == '__main__':
