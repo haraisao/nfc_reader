@@ -25,7 +25,7 @@ class CardReader(object):
     self.nanaco = self.set_felica("04C7")
     self.waon = self.set_felica("684F")
 
-    self.targets = [ self.T106A, self.T106B, self.edy, self.express, self.nanaco, self.waon ]
+    self.targets = [ self.suica, self.T106A, self.T106B, self.edy, self.express, self.nanaco, self.waon ]
 
   #
   #
@@ -37,9 +37,7 @@ class CardReader(object):
   #
   #
   def sense(self):
-    self.target = self.clf.sense(self.suica, interval=0.2)
-    if self.target is None:
-      self.target = self.clf.sense(*self.targets, interval=0.2)
+    self.target = self.clf.sense(*self.targets, interval=0.2)
     return self.target
 
   #
