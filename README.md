@@ -20,3 +20,7 @@ Simple NFC reader
 
  - Run nfc_reader.py
     - python3 scripts/nfc_reader.py
+
+## Document(in Japanese)
+- http://hara-jp.com/_default/ja/Topics/RaspPiCardReader.html
+- 
