@@ -5,6 +5,7 @@ import nfc
 import nfc.tag.tt3
 import nfc.tag.tt4
 import binascii
+import sys
 import os
 import time
 
@@ -26,18 +27,37 @@ class CardReader(object):
     self.waon = self.set_felica("684F")
 
     self.targets = [ self.suica, self.T106A, self.T106B, self.edy, self.express, self.nanaco, self.waon ]
+    self.targets1 = [ self.suica, self.T106A, self.T106B ]
+    self.targets2 = [ self.T106A, self.T106B, self.set_felica() ]
+
+    self.toggle=0
+
 
   #
   #
-  def set_felica(self, sys):
+  def set_felica(self, sys_=None):
     target = nfc.clf.RemoteTarget("212F")
-    target.sensf_req=bytearray.fromhex("00%s0000" % sys)
+    if sys_ is not None:
+      target.sensf_req=bytearray.fromhex("00%s0000" % sys_)
     return target
 
   #
   #
-  def sense(self):
-    self.target = self.clf.sense(*self.targets, interval=0.2)
+  def sense(self, toggle=False):
+    if toggle:
+      self.target = self.sense_toggle()
+    else:
+      self.target = self.clf.sense(*self.targets, iterations=5, interval=0.5)
+    return self.target
+
+  #
+  #
+  def sense_toggle(self):
+    if self.toggle == 0:
+      self.target = self.clf.sense(*self.targets, iterations=10, interval=0.1)
+    else:
+      self.target = self.clf.sense(*self.targets2, iterations=1, interval=0.1)
+    self.toggle = (self.toggle + 1) % 2
     return self.target
 
   #
@@ -60,8 +80,8 @@ class CardReader(object):
  
   #
   #
-  def read_card_id(self):
-    while self.sense() is None: time.sleep(0.1)
+  def read_card_id(self, flag=False):
+    while self.sense(flag) is None: time.sleep(0.1)
     if self.on_discover(self.target) :
       tag = nfc.tag.activate(self.clf, self.target)
       return tag, self.get_idm(tag)
@@ -69,10 +89,19 @@ class CardReader(object):
 #
 #
 def main():
+  tm=1
+  flag=1
+  if len(sys.argv) > 1:
+    tm=int(sys.argv[1])
+    if len(sys.argv) > 2:
+      flag=int(sys.argv[2])
+
   cr=CardReader()
-  print("Please touch")
-  tag, idm = cr.read_card_id()
-  print(idm, tag)
+  for i in range(tm):
+    print("Please touch")
+    tag, idm = cr.read_card_id(flag)
+    print(idm, tag)
+    time.sleep(2)
   
 
 if __name__ == '__main__':
